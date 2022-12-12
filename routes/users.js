@@ -67,13 +67,14 @@ router.post("/signin", (req, res) => {
 });
 
 // Update the information
-router.put("/update", (req, res) => {
+router.put("/update/", (req, res) => {
   if (
     !checkBody(req.body, [
+      "token",
       "sport",
       "frequency",
       "dateOfBirth",
-      "sexe",
+      "sex",
       "mixedSex",
     ])
   ) {
@@ -81,25 +82,17 @@ router.put("/update", (req, res) => {
     return;
   }
 
-  User.findOne({ token: req.body.token }).then((user) => {
-    if (user === null) {
-      res.json({ result: false, error: "User not found" });
-      return;
+  User.updateOne(
+    { token: req.body.token },
+    {
+      sport: req.body.sport,
+      frequency: req.body.frequency,
+      dateOfBirth: req.body.dateOfBirth,
+      sex: req.body.sex,
+      mixedSex: req.body.mixedSex,
     }
-
-    /*if (tweet.likes.includes(user._id)) { // User already liked the tweet
-    Tweet.updateOne({ _id: tweet._id }, { $pull: { likes: user._id } }) // Remove user ID from likes
-      .then(() => {
-        res.json({ result: true });
-      });
-  } else { // User has not liked the tweet
-    Tweet.updateOne({ _id: tweet._id }, { $push: { likes: user._id } }) // Add user ID to likes
-      .then(() => {
-        res.json({ result: true });
-      });
-  }
-});
-*/
+  ).then((data) => {
+    res.json({ result: true });
   });
 });
 
