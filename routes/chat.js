@@ -3,10 +3,10 @@ var router = express.Router();
 
 const Pusher = require("pusher");
 const pusher = new Pusher({
-  appId: process.env.PUSHER_APPID,
-  key: process.env.PUSHER_KEY,
-  secret: process.env.PUSHER_SECRET,
-  cluster: process.env.PUSHER_CLUSTER,
+  appId: "1523540",
+  key: "20d4ff0a04f440d2d436",
+  secret: "a48ece1ef92926b4fcf3",
+  cluster: "eu",
   useTLS: true,
 });
 
@@ -31,7 +31,7 @@ router.post("/message", (req, res) => {
 
   pusher.trigger("chat", "message", message);
 
-  res.json({ result: true });
+  res.json({ result: true, data: message });
 });
 
 module.exports = router;
