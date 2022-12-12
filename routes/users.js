@@ -6,6 +6,7 @@ const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
+const { token } = require("morgan");
 
 /* GET users listing. */
 router.get("/", function (req, res) {
@@ -14,24 +15,24 @@ router.get("/", function (req, res) {
 
 // Router for the signup
 router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["username", "fullname", "mail", "password"])) {
+  if (!checkBody(req.body, ["firstName", "lastName", "mail", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
   // Check if the user has not already been registered
   User.findOne({
-    username: req.body.username,
-    fullname: req.body.fullname,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     mail: req.body.mail,
-    password: hash,
+    password: bcrypt.hash,
   }).then((data) => {
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        username: req.body.username,
-        fullname: req.body.fullname,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         mail: req.body.mail,
         password: hash,
         token: uid2(32),
@@ -54,7 +55,7 @@ router.post("/signin", (req, res) => {
     return;
   }
   // Check if the user signin with the right information
-  User.findOne({ email: req.body.email, password: req.body.password }).then(
+  User.findOne({ mail: req.body.mail, password: req.body.password }).then(
     (data) => {
       if (data && bcrypt.compareSync(req.body.password, data.password)) {
         res.json({ result: true, token: data.token });
@@ -63,6 +64,43 @@ router.post("/signin", (req, res) => {
       }
     }
   );
+});
+
+// Update the information
+router.put("/update", (req, res) => {
+  if (
+    !checkBody(req.body, [
+      "sport",
+      "frequency",
+      "dateOfBirth",
+      "sexe",
+      "mixedSex",
+    ])
+  ) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+
+    /*if (tweet.likes.includes(user._id)) { // User already liked the tweet
+    Tweet.updateOne({ _id: tweet._id }, { $pull: { likes: user._id } }) // Remove user ID from likes
+      .then(() => {
+        res.json({ result: true });
+      });
+  } else { // User has not liked the tweet
+    Tweet.updateOne({ _id: tweet._id }, { $push: { likes: user._id } }) // Add user ID to likes
+      .then(() => {
+        res.json({ result: true });
+      });
+  }
+});
+*/
+  });
 });
 
 module.exports = router;

@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
   lastName: String,
-  fistName: String,
-  email: String,
+  firstName: String,
+  mail: String,
   password: String,
   userSport: { type: mongoose.Schema.Types.ObjectId, ref: "sports" },
   token: String,
@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
   dateOfBirth: Date,
   sex: String,
   city: String,
-  mixedSex: String,
+  mixedSex: Boolean,
   events: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
