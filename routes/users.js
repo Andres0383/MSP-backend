@@ -23,9 +23,6 @@ router.post("/signup", (req, res) => {
   // Check if the user has not already been registered
   User.findOne({
     firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    mail: req.body.mail,
-    password: bcrypt.hash,
   }).then((data) => {
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
@@ -55,15 +52,18 @@ router.post("/signin", (req, res) => {
     return;
   }
   // Check if the user signin with the right information
-  User.findOne({ mail: req.body.mail, password: req.body.password }).then(
-    (data) => {
-      if (data && bcrypt.compareSync(req.body.password, data.password)) {
-        res.json({ result: true, token: data.token });
-      } else {
-        res.json({ result: false, error: "Mail not found or wrong password" });
-      }
+  User.findOne({ mail: req.body.mail }).then((data) => {
+    if (bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({
+        result: true,
+        token: data.token,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+    } else {
+      res.json({ result: false, error: "Mail not found or wrong password" });
     }
-  );
+  });
 });
 
 // Update the information
