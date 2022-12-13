@@ -29,7 +29,6 @@ router.post("/signup", (req, res) => {
 
       const newUser = new User({
         firstName: req.body.firstName,
-        lastName: req.body.lastName,
         mail: req.body.mail,
         password: hash,
         token: uid2(32),
@@ -58,7 +57,6 @@ router.post("/signin", (req, res) => {
         result: true,
         token: data.token,
         firstName: data.firstName,
-        lastName: data.lastName,
       });
     } else {
       res.json({ result: false, error: "Mail not found or wrong password" });
