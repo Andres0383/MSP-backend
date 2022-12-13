@@ -7,7 +7,6 @@ const Event = require("../models/events");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
-const { token } = require("morgan");
 
 /* GET users listing. */
 router.get("/", function (req, res) {
@@ -52,12 +51,10 @@ router.post("/signin", (req, res) => {
     return;
   }
   // Check if the user signin with the right information
-  User.findOne({ mail: req.body.email }).then((data) => {
+  User.findOne({ email: req.body.email }).then((data) => {
     if (bcrypt.compareSync(req.body.password, data.password)) {
       res.json({
         result: true,
-        token: data.token,
-        firstname: data.firstname,
       });
     } else {
       res.json({ result: false, error: "Mail not found or wrong password" });

@@ -10,6 +10,7 @@ const { checkBody } = require("../modules/checkBody");
 router.post("events/newevent/", (req, res) => {
   if (
     !checkBody(req.body, [
+      "token",
       "sport",
       "date",
       "hour",
@@ -25,13 +26,14 @@ router.post("events/newevent/", (req, res) => {
     token: req.body.token,
   }).then((data) => {
     if (data === null) {
-      const { sport, date, hour, description, address, pickup } = req.body;
+      const { token, sport, date, hour, description, address, pickup } =
+        req.body;
       const newEvent = new Event({
+        token,
         sport,
         date,
         hour,
         description,
-
         address,
         pickup,
       });
