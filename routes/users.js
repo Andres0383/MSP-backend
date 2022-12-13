@@ -72,7 +72,7 @@ router.put("/update/", (req, res) => {
     !checkBody(req.body, [
       "token",
       "sport",
-      "frequency",
+      "level",
       "dateOfBirth",
       "sex",
       "mixedSex",
@@ -86,7 +86,7 @@ router.put("/update/", (req, res) => {
     { token: req.body.token },
     {
       sport: req.body.sport,
-      frequency: req.body.frequency,
+      level: req.body.level,
       dateOfBirth: req.body.dateOfBirth,
       sex: req.body.sex,
       mixedSex: req.body.mixedSex,

@@ -30,11 +30,11 @@ router.post("/newevent", (req, res) => {
     if (data) {
       const { date, hour, description, address, pickup, sport } = req.body;
       Sport.findOne({ sport }).then((data) => {
-        console.log(data);
+        //console.log(data);
         const newEvent = new Event({
           user: [user],
           sport: data._id,
-          date,
+          date: new Date(date),
           hour,
           description,
           address,
@@ -42,12 +42,16 @@ router.post("/newevent", (req, res) => {
         });
 
         newEvent.save().then((newDoc) => {
-          console.log(newDoc);
+          //console.log(newDoc);
           res.json({ result: true, newDoc });
         });
       });
     }
     return;
+  });
+  User.updateOne({ token: req.body.token }, {}).then((data) => {
+    console.log(data);
+    res.json({ result: true });
   });
 });
 
