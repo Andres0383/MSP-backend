@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
 const sportSchema = mongoose.Schema({
-  sportName: String,
-  logo: Image,
+  sport: String,
 });
 
 const Sport = mongoose.model("sports", sportSchema);
