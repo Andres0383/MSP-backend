@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const eventSchema = mongoose.Event({
+const eventSchema = mongoose.Schema({
   sport: { type: mongoose.Schema.Types.ObjectId, ref: "sports" },
   date: Date,
-  hour: Date,
+  hour: String,
   description: String,
   user: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   address: String,

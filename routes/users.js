@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
+const Event = require("../models/events");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
@@ -15,21 +16,21 @@ router.get("/", function (req, res) {
 
 // Router for the signup
 router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["firstName", "lastName", "mail", "password"])) {
+  if (!checkBody(req.body, ["firstname", "email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
   // Check if the user has not already been registered
   User.findOne({
-    firstName: req.body.firstName,
+    firstname: req.body.firstname,
   }).then((data) => {
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        firstName: req.body.firstName,
-        mail: req.body.mail,
+        firstname: req.body.firstname,
+        email: req.body.email,
         password: hash,
         token: uid2(32),
       });
@@ -46,17 +47,17 @@ router.post("/signup", (req, res) => {
 
 // Router for the signin
 router.post("/signin", (req, res) => {
-  if (!checkBody(req.body, ["mail", "password"])) {
+  if (!checkBody(req.body, ["email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
   // Check if the user signin with the right information
-  User.findOne({ mail: req.body.mail }).then((data) => {
+  User.findOne({ mail: req.body.email }).then((data) => {
     if (bcrypt.compareSync(req.body.password, data.password)) {
       res.json({
         result: true,
         token: data.token,
-        firstName: data.firstName,
+        firstname: data.firstname,
       });
     } else {
       res.json({ result: false, error: "Mail not found or wrong password" });
@@ -88,6 +89,22 @@ router.put("/update/", (req, res) => {
       dateOfBirth: req.body.dateOfBirth,
       sex: req.body.sex,
       mixedSex: req.body.mixedSex,
+    }
+  ).then((data) => {
+    res.json({ result: true });
+  });
+});
+
+router.put("/city/", (req, res) => {
+  if (!checkBody(req.body, ["token", "city"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.updateOne(
+    { token: req.body.token },
+    {
+      city: req.body.city,
     }
   ).then((data) => {
     res.json({ result: true });

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-  firstName: String,
-  mail: String,
+  firstname: String,
+  email: String,
   password: String,
   userSport: { type: mongoose.Schema.Types.ObjectId, ref: "sports" },
   token: String,
