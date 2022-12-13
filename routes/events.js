@@ -1,13 +1,13 @@
 var express = require("express");
 var router = express.Router();
-
+const { checkBody } = require("../modules/checkBody");
 require("../models/connection");
 const User = require("../models/users");
 const Event = require("../models/events");
-const { checkBody } = require("../modules/checkBody");
+const Sport = require("../models/sports");
 
 //create event
-router.post("events/newevent/", (req, res) => {
+router.post("/newevent", (req, res) => {
   if (
     !checkBody(req.body, [
       "token",
@@ -25,25 +25,30 @@ router.post("events/newevent/", (req, res) => {
   User.findOne({
     token: req.body.token,
   }).then((data) => {
-    if (data === null) {
-      const { token, sport, date, hour, description, address, pickup } =
-        req.body;
-      const newEvent = new Event({
-        token,
-        sport,
-        date,
-        hour,
-        description,
-        address,
-        pickup,
-      });
+    //console.log(data);
+    const user = data._id;
+    if (data) {
+      const { date, hour, description, address, pickup, sport } = req.body;
+      Sport.findOne({ sport }).then((data) => {
+        console.log(data);
+        const newEvent = new Event({
+          user: [user],
+          sport: data._id,
+          date,
+          hour,
+          description,
+          address,
+          pickup,
+        });
 
-      newEvent.save().then((newDoc) => {
-        console.log(newDoc);
-        res.json({ result: true, newDoc });
+        newEvent.save().then((newDoc) => {
+          console.log(newDoc);
+          res.json({ result: true, newDoc });
+        });
       });
     }
     return;
   });
 });
+
 module.exports = router;
