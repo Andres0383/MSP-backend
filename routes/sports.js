@@ -7,11 +7,11 @@ const Sports = require("../models/sports");
 const { checkBody } = require("../modules/checkBody");
 
 /* GET sports listing. */
-router.get("/:sports", (req, res) => {
+router.get("/:allSports", (req, res) => {
   Sports.find({
     sport: { $regex: new RegExp(req.params.sport, "i") },
   }).then((data) => {
-    res.json({ result: true, sports: data });
+    res.json({ result: true, users: data });
   });
 });
 

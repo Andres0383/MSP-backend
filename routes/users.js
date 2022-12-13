@@ -10,8 +10,12 @@ const bcrypt = require("bcrypt");
 const { token } = require("morgan");
 
 /* GET users listing. */
-router.get("/", function (req, res) {
-  res.send("respond with a resource");
+router.get("/:allUsers", (req, res) => {
+  User.find({
+    user: req.params.users,
+  }).then((data) => {
+    res.json({ result: true, sports: data });
+  });
 });
 
 // Router for the signup
@@ -71,11 +75,12 @@ router.put("/update/", (req, res) => {
   if (
     !checkBody(req.body, [
       "token",
-      "sport",
+      "userSport",
       "level",
       "dateOfBirth",
       "sex",
       "mixedSex",
+      "city",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -85,26 +90,11 @@ router.put("/update/", (req, res) => {
   User.updateOne(
     { token: req.body.token },
     {
-      sport: req.body.sport,
+      userSport: req.body.userSport,
       level: req.body.level,
       dateOfBirth: req.body.dateOfBirth,
       sex: req.body.sex,
       mixedSex: req.body.mixedSex,
-    }
-  ).then((data) => {
-    res.json({ result: true });
-  });
-});
-
-router.put("/city/", (req, res) => {
-  if (!checkBody(req.body, ["token", "city"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
-
-  User.updateOne(
-    { token: req.body.token },
-    {
       city: req.body.city,
     }
   ).then((data) => {

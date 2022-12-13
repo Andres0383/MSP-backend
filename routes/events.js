@@ -6,6 +6,14 @@ const User = require("../models/users");
 const Event = require("../models/events");
 const Sport = require("../models/sports");
 
+router.get("/:allEvents", (req, res) => {
+  Event.find({
+    event: req.params.events,
+  }).then((data) => {
+    res.json({ result: true, events: data });
+  });
+});
+
 //create event
 router.post("/newevent", (req, res) => {
   if (
