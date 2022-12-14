@@ -8,7 +8,6 @@ const eventSchema = mongoose.Schema({
   hour: String,
   description: String,
   address: String,
-  pickup: Boolean,
 });
 
 const Event = mongoose.model("events", eventSchema);

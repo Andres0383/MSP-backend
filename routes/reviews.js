@@ -35,4 +35,13 @@ router.post("/", (req, res) => {
   });
 });
 
+// Get a review
+router.get("/:allReviews", (req, res) => {
+  Review.find({
+    review: req.params.reviews,
+  }).then((data) => {
+    res.json({ result: true, review: data });
+  });
+});
+
 module.exports = router;

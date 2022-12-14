@@ -23,7 +23,6 @@ router.post("/newevent", (req, res) => {
       "hour",
       "description",
       "address",
-      "pickup",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -47,7 +46,6 @@ router.post("/newevent", (req, res) => {
       hour,
       description,
       address,
-      pickup,
     });
     newEvent.save().then((newDoc) => {
       //console.log(newDoc);
