@@ -40,6 +40,7 @@ router.post("/newevent", (req, res) => {
 
     //console.log(data);
     const newEvent = new Event({
+      author: user,
       user: [user],
       sport,
       date: new Date(date),
@@ -78,14 +79,6 @@ router.put("/participate", (req, res) => {
       if (!event) {
         res.json({ result: false, error: "Event not found" });
         return;
-      }
-      if (event.user.includes(event._id)) {
-        User.updateOne(
-          { _id: user._id },
-          { $pull: { participate: event._id } }
-        ).then(() => {
-          res.json({ result: true });
-        });
       } else {
         User.updateOne(
           { _id: user._id },
@@ -95,6 +88,40 @@ router.put("/participate", (req, res) => {
         });
       }
     });
+  });
+});
+
+router.delete("/", (req, res) => {
+  if (!checkBody(req.body, ["token", "eventsId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+
+    Event.findById(req.body.eventsId)
+      .populate("author")
+      .then((event) => {
+        if (!event) {
+          res.json({ result: false, error: "Event not found" });
+          return;
+        } else if (String(event.author._id) !== String(user._id)) {
+          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({
+            result: false,
+            error: "Event can only be deleted by its author",
+          });
+          return;
+        }
+
+        Event.deleteOne({ _id: event._id }).then(() => {
+          res.json({ result: true });
+        });
+      });
   });
 });
 

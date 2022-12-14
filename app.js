@@ -6,11 +6,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var chatRouter = require("./routes/chat");
-var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var eventsRouter = require("./routes/events");
-//var reviewsRouter = require("./routes/reviews");
-//var sportsRouter = require("./routes/sports");
+var reviewsRouter = require("./routes/reviews");
 
 var app = express();
 const cors = require("cors");
@@ -23,10 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/chat", chatRouter);
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
-//app.use("/reviews", reviewsRouter);
-//app.use("/sports", sportsRouter);
+app.use("/reviews", reviewsRouter);
 
 module.exports = app;

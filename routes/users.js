@@ -3,11 +3,10 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
-const Event = require("../models/events");
+
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
-const { token } = require("morgan");
 
 /* GET users listing. */
 router.get("/:allUsers", (req, res) => {
