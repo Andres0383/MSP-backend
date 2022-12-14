@@ -10,7 +10,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var eventsRouter = require("./routes/events");
 //var reviewsRouter = require("./routes/reviews");
-var sportsRouter = require("./routes/sports");
+//var sportsRouter = require("./routes/sports");
 
 var app = express();
 const cors = require("cors");
@@ -27,6 +27,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
 //app.use("/reviews", reviewsRouter);
-app.use("/sports", sportsRouter);
+//app.use("/sports", sportsRouter);
 
 module.exports = app;

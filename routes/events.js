@@ -4,7 +4,6 @@ const { checkBody } = require("../modules/checkBody");
 require("../models/connection");
 const User = require("../models/users");
 const Event = require("../models/events");
-const Sport = require("../models/sports");
 
 router.get("/:allEvents", (req, res) => {
   Event.find({
@@ -30,37 +29,35 @@ router.post("/newevent", (req, res) => {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-  User.findOne({
-    token: req.body.token,
-  }).then((data) => {
-    // console.log(data);
-    if (data) {
-      const user = data._id;
-      const { date, hour, description, address, pickup, sport } = req.body;
-      Sport.findOne({ sport }).then((data) => {
-        //console.log(data);
-        const newEvent = new Event({
-          user: [user],
-          sport: data._id,
-          date: new Date(date),
-          hour,
-          description,
-          address,
-          pickup,
-        });
-        newEvent.save().then((newDoc) => {
-          //console.log(newDoc);
-          User.updateOne(
-            { _id: user._id },
-            { $push: { participate: newDoc._id, events: newDoc._id } }
-          ).then((data) => {
-            //console.log(data);
-            res.json({ result: true });
-          });
-        });
-      });
+  User.findOne({ token: req.body.token }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
     }
-    return;
+    // console.log(data);
+    const user = data._id;
+    const { date, hour, description, address, pickup, sport } = req.body;
+
+    //console.log(data);
+    const newEvent = new Event({
+      user: [user],
+      sport,
+      date: new Date(date),
+      hour,
+      description,
+      address,
+      pickup,
+    });
+    newEvent.save().then((newDoc) => {
+      //console.log(newDoc);
+      User.updateOne(
+        { _id: user._id },
+        { $push: { participate: newDoc._id, events: newDoc._id } }
+      ).then((data) => {
+        //console.log(data);
+        res.json({ result: true });
+      });
+    });
   });
 });
 

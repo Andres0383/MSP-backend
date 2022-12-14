@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   firstname: String,
   email: String,
   password: String,
-  sport: { type: mongoose.Schema.Types.ObjectId, ref: "sports" },
+  sport: [String],
   token: String,
   level: String,
   dateOfBirth: Date,
