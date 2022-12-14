@@ -33,9 +33,9 @@ router.post("/newevent", (req, res) => {
   User.findOne({
     token: req.body.token,
   }).then((data) => {
-    //console.log(data);
-    const user = data._id;
+    // console.log(data);
     if (data) {
+      const user = data._id;
       const { date, hour, description, address, pickup, sport } = req.body;
       Sport.findOne({ sport }).then((data) => {
         //console.log(data);
@@ -48,18 +48,56 @@ router.post("/newevent", (req, res) => {
           address,
           pickup,
         });
-
         newEvent.save().then((newDoc) => {
           //console.log(newDoc);
-          res.json({ result: true, newDoc });
+          User.updateOne(
+            { _id: user._id },
+            { $push: { participate: newDoc._id, events: newDoc._id } }
+          ).then((data) => {
+            //console.log(data);
+            res.json({ result: true });
+          });
         });
       });
     }
     return;
   });
-  User.updateOne({ token: req.body.token }, {}).then((data) => {
-    console.log(data);
-    res.json({ result: true });
+});
+
+router.put("/participate", (req, res) => {
+  if (!checkBody(req.body, ["token", "eventsId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({
+    token: req.body.token,
+  }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    const user = data._id;
+    Event.findById(req.body.eventsId).then((event) => {
+      if (!event) {
+        res.json({ result: false, error: "Event not found" });
+        return;
+      }
+      if (event.user.includes(event._id)) {
+        User.updateOne(
+          { _id: user._id },
+          { $pull: { participate: event._id } }
+        ).then(() => {
+          res.json({ result: true });
+        });
+      } else {
+        User.updateOne(
+          { _id: user._id },
+          { $push: { participate: event._id } }
+        ).then(() => {
+          res.json({ result: true });
+        });
+      }
+    });
   });
 });
 

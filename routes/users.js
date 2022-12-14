@@ -75,12 +75,11 @@ router.put("/update/", (req, res) => {
   if (
     !checkBody(req.body, [
       "token",
-      "userSport",
+      "sport",
       "level",
       "dateOfBirth",
       "sex",
       "mixedSex",
-      "city",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -90,7 +89,7 @@ router.put("/update/", (req, res) => {
   User.updateOne(
     { token: req.body.token },
     {
-      userSport: req.body.userSport,
+      sport: req.body.sport,
       level: req.body.level,
       dateOfBirth: req.body.dateOfBirth,
       sex: req.body.sex,
