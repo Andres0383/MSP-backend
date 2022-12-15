@@ -7,7 +7,9 @@ const eventSchema = mongoose.Schema({
   date: Date,
   hour: String,
   description: String,
-  address: String,
+  latitude: Number,
+  longitude: Number,
+  name: String,
 });
 
 const Event = mongoose.model("events", eventSchema);

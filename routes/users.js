@@ -9,11 +9,20 @@ const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
 /* GET users listing. */
-router.get("/:allUsers", (req, res) => {
-  User.find({
-    user: req.params.users,
-  }).then((data) => {
-    res.json({ result: true, sports: data });
+router.get("/all/:token", (req, res) => {
+  User.findOne({
+    token: req.params.token,
+  }).then((user) => {
+    console.log(user);
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    User.findOne({
+      token: req.params.token,
+    }).then((data) => {
+      res.json({ result: true, user: data });
+    });
   });
 });
 
@@ -71,6 +80,7 @@ router.post("/signin", (req, res) => {
 
 // Update the information
 router.put("/update/", (req, res) => {
+  console.log(req.body);
   if (
     !checkBody(req.body, [
       "token",

@@ -5,11 +5,20 @@ require("../models/connection");
 const User = require("../models/users");
 const Event = require("../models/events");
 
-router.get("/:allEvents", (req, res) => {
-  Event.find({
-    event: req.params.events,
-  }).then((data) => {
-    res.json({ result: true, events: data });
+// get events user
+router.get("/all/:token", (req, res) => {
+  User.findOne({ token: req.params.token }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    Event.find()
+      .populate("author", ["firstName"])
+      .populate("events", ["firstName"])
+      .sort({ createdAt: "desc" })
+      .then((events) => {
+        res.json({ result: true, events });
+      });
   });
 });
 
