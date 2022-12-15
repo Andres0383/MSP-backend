@@ -14,7 +14,7 @@ router.get("/all/:token", (req, res) => {
     }
     Event.find()
       .populate("author", ["firstName"])
-      .populate("events", ["firstName"])
+      .populate("user", ["firstName"])
       .sort({ createdAt: "desc" })
       .then((events) => {
         res.json({ result: true, events });
@@ -31,7 +31,9 @@ router.post("/newevent", (req, res) => {
       "date",
       "hour",
       "description",
-      "address",
+      "latitude",
+      "longitude",
+      "name",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -44,7 +46,8 @@ router.post("/newevent", (req, res) => {
     }
     // console.log(data);
     const user = data._id;
-    const { date, hour, description, address, pickup, sport } = req.body;
+    const { date, hour, description, name, latitude, longitude, sport } =
+      req.body;
 
     //console.log(data);
     const newEvent = new Event({
@@ -54,7 +57,9 @@ router.post("/newevent", (req, res) => {
       date: new Date(date),
       hour,
       description,
-      address,
+      name,
+      longitude,
+      latitude,
     });
     newEvent.save().then((newDoc) => {
       //console.log(newDoc);
