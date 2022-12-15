@@ -8,6 +8,7 @@ const Event = require("../models/events");
 // get events user
 router.get("/all/:token", (req, res) => {
   User.findOne({ token: req.params.token }).then((user) => {
+    //console.log(user);
     if (user === null) {
       res.json({ result: false, error: "User not found" });
       return;
@@ -20,6 +21,16 @@ router.get("/all/:token", (req, res) => {
         res.json({ result: true, events });
       });
   });
+});
+
+//get all avents
+router.get("/all", (req, res) => {
+  Event.find()
+    .populate("author", ["firstName"])
+    .populate("user", ["firstName"])
+    .then((events) => {
+      res.json({ result: true, events });
+    });
 });
 
 //create event
@@ -103,6 +114,7 @@ router.put("/participate", (req, res) => {
   });
 });
 
+// cancel event
 router.delete("/", (req, res) => {
   if (!checkBody(req.body, ["token", "eventsId"])) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -134,6 +146,35 @@ router.delete("/", (req, res) => {
           res.json({ result: true });
         });
       });
+  });
+});
+
+//add favorites
+router.post("/favorites", (req, res) => {
+  if (!checkBody(req.body, ["token"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({ token: req.body.token }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    // console.log(data);
+    Event.findById(req.body.eventsId).then((event) => {
+      console.log(event);
+      if (!event) {
+        res.json({ result: false, error: "Event not found" });
+      } else {
+        User.updateOne(
+          { _id: data._id },
+          { $push: { favorites: event._id } }
+        ).then((data) => {
+          //console.log(data);
+          res.json({ result: true });
+        });
+      }
+    });
   });
 });
 
