@@ -3,10 +3,14 @@ var router = express.Router();
 
 require("../models/connection");
 const User = require("../models/users");
+const Event = require("../models/events");
+const Reviews = require("../models/reviews");
 
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
+const { events } = require("../models/users");
+const Review = require("../models/reviews");
 
 /* GET users listing. */
 router.get("/all/:token", (req, res) => {
@@ -89,26 +93,51 @@ router.put("/update/", (req, res) => {
       "dateOfBirth",
       "sex",
       "mixedSex",
-      "descritpion",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
 
+  const { sport, level, dateOfBirth, sex, mixedSex, city, description } =
+    req.body;
   User.updateOne(
     { token: req.body.token },
     {
-      sport: req.body.sport,
-      level: req.body.level,
-      dateOfBirth: req.body.dateOfBirth,
-      sex: req.body.sex,
-      mixedSex: req.body.mixedSex,
-      city: req.body.city,
-      description: req.body.description,
+      sport,
+      level,
+      dateOfBirth: new Date(dateOfBirth),
+      sex,
+      mixedSex,
+      city,
+      description,
     }
   ).then((data) => {
     res.json({ result: true });
+  });
+});
+
+//account deletion
+router.delete("/delete", (req, res) => {
+  if (!checkBody(req.body, ["token"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then((user) => {
+    if (user === null) {
+      console.log(user);
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+
+    User.deleteOne({ _id: user._id }).then(() => {
+      Event.deleteMany({ author: user._id }).then((data) => {
+        Reviews.deleteMany({ user: user._id }).then((data) => {
+          res.json({ result: "account deleted" });
+        });
+      });
+    });
   });
 });
 
