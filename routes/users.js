@@ -78,7 +78,7 @@ router.post("/signin", (req, res) => {
   });
 });
 
-// Update the information
+// Update the information (quizz + desciption profile)
 router.put("/update/", (req, res) => {
   console.log(req.body);
   if (
