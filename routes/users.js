@@ -115,6 +115,23 @@ router.put("/update/", (req, res) => {
   });
 });
 
+router.put("/description", (req, res) => {
+  console.log(req.body);
+  if (!checkBody(req.body, ["token", "description"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  const { description } = req.body;
+  User.updateOne(
+    { token: req.body.token },
+    {
+      description,
+    }
+  ).then((data) => {
+    res.json({ result: true });
+  });
+});
 //account deletion
 router.delete("/delete", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
