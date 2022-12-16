@@ -89,6 +89,7 @@ router.put("/update/", (req, res) => {
       "dateOfBirth",
       "sex",
       "mixedSex",
+      "descritpion",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -104,6 +105,7 @@ router.put("/update/", (req, res) => {
       sex: req.body.sex,
       mixedSex: req.body.mixedSex,
       city: req.body.city,
+      description: req.body.description,
     }
   ).then((data) => {
     res.json({ result: true });

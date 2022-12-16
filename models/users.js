@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
   sex: String,
   city: String,
   mixedSex: String,
+  description: String,
   events: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
