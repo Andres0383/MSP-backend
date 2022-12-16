@@ -9,11 +9,9 @@ const Reviews = require("../models/reviews");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
-const { events } = require("../models/users");
-const Review = require("../models/reviews");
 
 /* GET users listing. */
-router.get("/all/:token", (req, res) => {
+router.get("/:token", (req, res) => {
   User.findOne({
     token: req.params.token,
   }).then((user) => {
