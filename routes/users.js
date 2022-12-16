@@ -80,7 +80,7 @@ router.post("/signin", (req, res) => {
   });
 });
 
-// Update the information (quizz + desciption profile)
+// Update the information (quizz)
 router.put("/update/", (req, res) => {
   console.log(req.body);
   if (
@@ -115,6 +115,7 @@ router.put("/update/", (req, res) => {
   });
 });
 
+// description
 router.put("/description", (req, res) => {
   console.log(req.body);
   if (!checkBody(req.body, ["token", "description"])) {
