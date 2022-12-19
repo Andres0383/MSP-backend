@@ -22,15 +22,15 @@ router.get("/:token", (req, res) => {
 
     User.findOne({
       token: req.params.token,
-    }).then(() => {
-      Event.findById(req.body.eventsId).then((event) => {
-        console.log(event);
-        res.json({ result: true, event });
+    })
+      .populate("events")
+      .populate("participate")
+      .then((data) => {
+        console.log(data);
+        res.json({ result: true });
       });
-    });
   });
 });
-
 // Router for the signup
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["firstname", "email", "password"])) {
