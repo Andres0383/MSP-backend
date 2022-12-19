@@ -19,12 +19,19 @@ router.get("/:token", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
+
     User.findOne({
       token: req.params.token,
     }).then(() => {
       Event.findById(req.body.eventsId).then((event) => {
-        console.log(event);
-        res.json({ result: true });
+        if (!event) {
+          res.json({ result: false, error: "Event not found" });
+          return;
+        }
+        Event.findById(req.body.eventsId).then((event) => {
+          console.log(event);
+          res.json({ result: true, event });
+        });
       });
     });
   });
