@@ -28,7 +28,7 @@ const Event = require("../models/events");
 router.get("/all", (req, res) => {
   Event.find()
     .populate("author", ["firstname"])
-    .populate("user", ["firstname"], ["level"])
+    .populate("user", ["firstname"])
 
     .then((events) => {
       res.json({ result: true, events });
