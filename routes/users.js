@@ -23,8 +23,7 @@ router.get("/:token", (req, res) => {
       token: req.params.token,
     }).then(() => {
       Event.find()
-        .populate("user", ["events"])
-        .populate("user", ["participate"])
+        .populate("user", ["events", "participate"])
         .then((event) => {
           console.log(event);
           res.json({ result: true });
