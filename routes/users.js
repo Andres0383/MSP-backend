@@ -22,12 +22,10 @@ router.get("/:token", (req, res) => {
     User.findOne({
       token: req.params.token,
     }).then(() => {
-      Event.find()
-        .populate("user", ["events", "participate"])
-        .then((event) => {
-          console.log(event);
-          res.json({ result: true });
-        });
+      Event.findById(req.body.eventsId).then((event) => {
+        console.log(event);
+        res.json({ result: true });
+      });
     });
   });
 });
