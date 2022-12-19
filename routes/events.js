@@ -75,13 +75,12 @@ router.post("/newevent", (req, res) => {
     });
     newEvent.save().then((newDoc) => {
       //console.log(newDoc);
-      User.updateOne(
-        { _id: user._id },
-        { $push: { participate: newDoc._id, events: newDoc._id } }
-      ).then((data) => {
-        //console.log(data);
-        res.json({ result: true });
-      });
+      User.updateOne({ _id: user._id }, { $push: { events: newDoc._id } }).then(
+        (data) => {
+          //console.log(data);
+          res.json({ result: true });
+        }
+      );
     });
   });
 });
