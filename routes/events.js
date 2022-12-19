@@ -6,7 +6,7 @@ const User = require("../models/users");
 const Event = require("../models/events");
 
 // get events user
-router.get("/all/:token", (req, res) => {
+/*/router.get("/all/:token", (req, res) => {
   User.findOne({ token: req.params.token }).then((user) => {
     //console.log(user);
     if (user === null) {
@@ -22,14 +22,14 @@ router.get("/all/:token", (req, res) => {
         res.json({ result: true, events });
       });
   });
-});
+});/*/
 
 //get all avents
 router.get("/all", (req, res) => {
   Event.find()
     .populate("author", ["firstname"])
-    .populate("user", ["firstname"])
-    .populate("user", ["level"])
+    .populate("user", ["firstname"], ["level"])
+
     .then((events) => {
       res.json({ result: true, events });
     });
