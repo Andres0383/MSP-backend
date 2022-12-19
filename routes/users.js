@@ -15,15 +15,17 @@ router.get("/:token", (req, res) => {
   User.findOne({
     token: req.params.token,
   }).then((user) => {
-    console.log(user);
     if (user === null) {
       res.json({ result: false, error: "User not found" });
       return;
     }
     User.findOne({
       token: req.params.token,
-    }).then((data) => {
-      res.json({ result: true, user: data });
+    }).then(() => {
+      Event.findById(req.body.eventsId).then((event) => {
+        console.log(event);
+        res.json({ result: true });
+      });
     });
   });
 });
