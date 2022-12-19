@@ -45,7 +45,7 @@ router.post("/newevent", (req, res) => {
       "description",
       "latitude",
       "longitude",
-      "name",
+      "address",
     ])
   ) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -58,7 +58,7 @@ router.post("/newevent", (req, res) => {
     }
     // console.log(data);
     const user = data._id;
-    const { date, hour, description, name, latitude, longitude, sport } =
+    const { date, hour, description, address, latitude, longitude, sport } =
       req.body;
 
     //console.log(data);
@@ -69,7 +69,7 @@ router.post("/newevent", (req, res) => {
       date: new Date(date),
       hour,
       description,
-      name,
+      address,
       longitude,
       latitude,
     });
