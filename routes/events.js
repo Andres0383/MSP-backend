@@ -16,6 +16,7 @@ router.get("/all/:token", (req, res) => {
     Event.find()
       .populate("author", ["firstname"])
       .populate("user", ["firstname"])
+      .populate("user", ["level"])
       .sort({ createdAt: "desc" })
       .then((events) => {
         res.json({ result: true, events });
@@ -28,6 +29,7 @@ router.get("/all", (req, res) => {
   Event.find()
     .populate("author", ["firstname"])
     .populate("user", ["firstname"])
+    .populate("user", ["level"])
     .then((events) => {
       res.json({ result: true, events });
     });
