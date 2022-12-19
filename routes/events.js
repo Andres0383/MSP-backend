@@ -144,6 +144,12 @@ router.delete("/", (req, res) => {
 
         Event.deleteOne({ _id: event._id }).then(() => {
           res.json({ result: true });
+          User.updateOne(
+            { _id: user._id },
+            { $pull: { events: event._id } }
+          ).then(() => {
+            res.json({ result: true });
+          });
         });
       });
   });
