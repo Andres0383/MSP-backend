@@ -85,7 +85,7 @@ router.post("/newevent", (req, res) => {
   });
 });
 
-router.put("/participate", (req, res) => {
+router.post("/participate", (req, res) => {
   if (!checkBody(req.body, ["token", "eventsId"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
