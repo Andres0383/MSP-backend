@@ -85,6 +85,44 @@ router.post("/newevent", (req, res) => {
   });
 });
 
+// cancel event
+router.delete("/", (req, res) => {
+  if (!checkBody(req.body, ["token", "eventsId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({ token: req.body.token }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    Event.findById(req.body.eventsId)
+      .populate("author")
+      .then((event) => {
+        if (!event) {
+          res.json({ result: false, error: "Event not found" });
+          return;
+        } else if (String(event.author._id) !== String(user._id)) {
+          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
+          res.json({
+            result: false,
+            error: "Event can only be deleted by its author",
+          });
+          return;
+        }
+        Event.deleteOne({ _id: event._id }).then(() => {
+          User.updateOne(
+            { _id: user._id },
+            { $pull: { events: event._id } }
+          ).then(() => {
+            res.json({ result: true });
+          });
+        });
+      });
+  });
+});
+
+//participate in an event
 router.put("/participate", (req, res) => {
   if (!checkBody(req.body, ["token", "eventsId"])) {
     res.json({ result: false, error: "Missing or empty fields" });
@@ -114,44 +152,33 @@ router.put("/participate", (req, res) => {
   });
 });
 
-// cancel event
-router.delete("/", (req, res) => {
+// unsubscribe from an event
+router.delete("/participate", (req, res) => {
   if (!checkBody(req.body, ["token", "eventsId"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-
-  User.findOne({ token: req.body.token }).then((user) => {
-    if (user === null) {
+  User.findOne({
+    token: req.body.token,
+  }).then((data) => {
+    if (data === null) {
       res.json({ result: false, error: "User not found" });
       return;
     }
-
-    Event.findById(req.body.eventsId)
-      .populate("author")
-      .then((event) => {
-        if (!event) {
-          res.json({ result: false, error: "Event not found" });
-          return;
-        } else if (String(event.author._id) !== String(user._id)) {
-          // ObjectId needs to be converted to string (JavaScript cannot compare two objects)
-          res.json({
-            result: false,
-            error: "Event can only be deleted by its author",
-          });
-          return;
-        }
-
-        Event.deleteOne({ _id: event._id }).then(() => {
+    const user = data._id;
+    Event.findById(req.body.eventsId).then((event) => {
+      if (!event) {
+        res.json({ result: false, error: "Event not found" });
+        return;
+      } else {
+        User.updateOne(
+          { _id: user._id },
+          { $pull: { participate: event._id } }
+        ).then(() => {
           res.json({ result: true });
-          User.updateOne(
-            { _id: user._id },
-            { $pull: { events: event._id } }
-          ).then(() => {
-            res.json({ result: true });
-          });
         });
-      });
+      }
+    });
   });
 });
 
