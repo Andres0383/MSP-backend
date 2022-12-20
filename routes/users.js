@@ -136,6 +136,25 @@ router.put("/description", (req, res) => {
     res.json({ result: true });
   });
 });
+
+router.put("/city", (req, res) => {
+  console.log(req.body);
+  if (!checkBody(req.body, ["token", "city"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  const { city } = req.body;
+  User.updateOne(
+    { token: req.body.token },
+    {
+      city,
+    }
+  ).then((data) => {
+    res.json({ result: true });
+  });
+});
+
 //account deletion
 router.delete("/delete", (req, res) => {
   if (!checkBody(req.body, ["token"])) {
