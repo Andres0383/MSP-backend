@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
   level: String,
   dateOfBirth: Date,
   sex: String,
-  city: [{ String }],
+  city: [{}],
   mixedSex: String,
   description: String,
   events: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
