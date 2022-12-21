@@ -9,6 +9,7 @@ const Event = require("../models/events");
 router.get("/all", (req, res) => {
   Event.find()
     .populate("user", [
+      "token",
       "firstname",
       "level",
       "dateOfBirth",
