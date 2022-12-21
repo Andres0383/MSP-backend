@@ -22,8 +22,7 @@ router.get("/all", (req, res) => {
       "participate.date",
       "participate.hour",
     ])
-    .populate("user.events", ["sport", "date", "hour"])
-    .populate("user.participate", ["sport", "date", "hour"])
+
     .then((events) => {
       console.log(events);
       res.json({ result: true, events });
