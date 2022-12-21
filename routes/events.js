@@ -15,6 +15,12 @@ router.get("/all", (req, res) => {
       "sport",
       "city",
       "description",
+      "events.sport",
+      "events.date",
+      "events.hour",
+      "participate.sport",
+      "participate.date",
+      "participate.hour",
     ])
     .populate("user.events", ["sport", "date", "hour"])
     .populate("user.participate", ["sport", "date", "hour"])
