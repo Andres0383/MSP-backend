@@ -5,29 +5,20 @@ require("../models/connection");
 const User = require("../models/users");
 const Event = require("../models/events");
 
-// get events user
-/*/router.get("/all/:token", (req, res) => {
-  User.findOne({ token: req.params.token }).then((user) => {
-    //console.log(user);
-    if (user === null) {
-      res.json({ result: false, error: "User not found" });
-      return;
-    }
-    Event.find()
-      .populate("author", ["firstname"])
-      .populate("user", ["firstname"])
-      .populate("user", ["level"])
-      .sort({ createdAt: "desc" })
-      .then((events) => {
-        res.json({ result: true, events });
-      });
-  });
-});/*/
-
 //get all avents
 router.get("/all", (req, res) => {
   Event.find()
-    .populate("user", ["firstname", "level"])
+    .populate("user", [
+      "firstname",
+      "level",
+      "dateOfBirth",
+      "sport",
+      "city",
+      "description",
+      "city",
+      "events",
+      "participate",
+    ])
 
     .then((events) => {
       res.json({ result: true, events });
