@@ -14,6 +14,8 @@ router.get("/all", (req, res) => {
     "sport",
     "city",
     "description",
+    "events",
+    "participate",
   ]);
   User.find()
     .populate("events", ["sport", "date", "hour"])
