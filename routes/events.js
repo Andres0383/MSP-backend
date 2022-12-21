@@ -7,18 +7,17 @@ const Event = require("../models/events");
 
 //get all avents
 router.get("/all", (req, res) => {
-  Event.find().populate("user", [
-    "firstname",
-    "level",
-    "dateOfBirth",
-    "sport",
-    "city",
-    "description",
-    "events",
-    "participate",
-  ]);
-  User.find()
-    .populate("events", ["sport", "date", "hour"])
+  Event.find()
+    .populate("user", [
+      "firstname",
+      "level",
+      "dateOfBirth",
+      "sport",
+      "city",
+      "description",
+      "events",
+      "participate",
+    ])
 
     .then((events) => {
       console.log(events);
