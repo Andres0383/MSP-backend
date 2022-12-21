@@ -15,8 +15,12 @@ router.get("/all", (req, res) => {
       "sport",
       "city",
       "description",
-      "events",
-      "participate",
+      "events.sport",
+      "events.date",
+      "events.hour",
+      "participate.sport",
+      "participate.date",
+      "participate.hour",
     ])
 
     .then((events) => {
