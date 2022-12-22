@@ -24,9 +24,14 @@ router.get("/:token", (req, res) => {
     })
       .populate("events")
       .populate("participate")
-      .populate("favorites")
+      .populate({
+        path: "favorites",
+        populate: {
+          path: "user",
+        },
+      })
       .then((userInfo) => {
-        console.log(userInfo.favorites);
+        // console.log(data);
 
         res.json({ result: true, userInfo });
       });
