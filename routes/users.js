@@ -23,16 +23,18 @@ router.get("/:token", (req, res) => {
     User.findOne({
       token: req.params.token,
     })
-      .populate("firstname")
+
       .populate("events")
       .populate("participate")
-      .populate("favorites")
+      .populate("favorites", ["firstname"])
       .then((userInfo) => {
         console.log(userInfo);
+
         res.json({ result: true, userInfo });
       });
   });
 });
+
 // Router for the signup
 router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["firstname", "email", "password"])) {
