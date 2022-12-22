@@ -28,7 +28,6 @@ router.get("/:token", (req, res) => {
         path: "favorites",
         populate: {
           path: "user",
-          select: "firstname",
         },
       })
       .then((userInfo) => {
