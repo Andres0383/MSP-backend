@@ -19,16 +19,14 @@ router.get("/:token", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
-
     User.findOne({
       token: req.params.token,
     })
-
       .populate("events")
       .populate("participate")
-      .populate("favorites", ["firstname"])
+      .populate("favorites")
       .then((userInfo) => {
-        console.log(userInfo);
+        console.log(userInfo.favorites);
 
         res.json({ result: true, userInfo });
       });
