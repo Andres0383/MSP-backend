@@ -23,6 +23,7 @@ router.get("/:token", (req, res) => {
     User.findOne({
       token: req.params.token,
     })
+      .populate("firstname")
       .populate("events")
       .populate("participate")
       .populate("favorites")
