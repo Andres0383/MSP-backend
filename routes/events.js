@@ -203,4 +203,61 @@ router.post("/favorites", (req, res) => {
   });
 });
 
+// get all favorites
+
+router.get("/favorites/:token", (req, res) => {
+  User.findOne({
+    token: req.params.token,
+  }).then((user) => {
+    if (user === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    Event.findById(req.body.eventsId).then((event) => {
+      //console.log(event);
+      if (!event) {
+        res.json({ result: false, error: "Event not found" });
+      } else {
+        Event.findById(req.body.eventsId)
+          .populate("user", ["token", "favorites"])
+          .then((events) => {
+            console.log(events.favorites);
+            res.json({ result: true, events });
+          });
+      }
+    });
+  });
+});
+
+// remove favorites
+
+router.delete("/favorites", (req, res) => {
+  if (!checkBody(req.body, ["token", "eventsId"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  User.findOne({
+    token: req.body.token,
+  }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    const user = data._id;
+    Event.findById(req.body.eventsId).then((event) => {
+      if (!event) {
+        res.json({ result: false, error: "Event not found" });
+        return;
+      } else {
+        User.updateOne(
+          { _id: user._id },
+          { $pull: { favorites: event._id } }
+        ).then(() => {
+          res.json({ result: true });
+        });
+      }
+    });
+  });
+});
+
 module.exports = router;
