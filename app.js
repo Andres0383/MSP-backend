@@ -9,6 +9,7 @@ var chatRouter = require("./routes/chat");
 var usersRouter = require("./routes/users");
 var eventsRouter = require("./routes/events");
 var reviewsRouter = require("./routes/reviews");
+var feedbackRouter = require("./routes/feedback");
 
 var app = express();
 const cors = require("cors");
@@ -24,5 +25,6 @@ app.use("/chat", chatRouter);
 app.use("/users", usersRouter);
 app.use("/events", eventsRouter);
 app.use("/reviews", reviewsRouter);
+app.use("/feedbacks", feedbackRouter);
 
 module.exports = app;

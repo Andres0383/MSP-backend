@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
   participate: [{ type: mongoose.Schema.Types.ObjectId, ref: "events" }],
+  feedback: { type: mongoose.Schema.Types.ObjectId, ref: "feedback" },
 });
 
 const User = mongoose.model("users", userSchema);
