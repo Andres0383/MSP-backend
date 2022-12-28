@@ -12,7 +12,7 @@ const pusher = new Pusher({
 
 router.put("/users/:firstname", (req, res) => {
   pusher.trigger("chat", "join", {
-    firstname: req.params.firstnam,
+    firstname: req.params.firstname,
   });
 
   res.json({ result: true });
