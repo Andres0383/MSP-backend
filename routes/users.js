@@ -125,6 +125,26 @@ router.put("/update/", (req, res) => {
   });
 });
 
+// edit profile
+router.put("/edit/", (req, res) => {
+  const { sport, level, dateOfBirth, sex, mixedSex, city, description } =
+    req.body;
+  User.updateOne(
+    { token: req.body.token },
+    {
+      sport,
+      level,
+      dateOfBirth: new Date(dateOfBirth),
+      sex,
+      mixedSex,
+      city,
+      description,
+    }
+  ).then((data) => {
+    res.json({ result: true });
+  });
+});
+
 // description
 router.put("/description", (req, res) => {
   console.log(req.body);
