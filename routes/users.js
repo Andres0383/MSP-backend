@@ -127,17 +127,19 @@ router.put("/update/", (req, res) => {
 
 // edit profile
 router.put("/edit/", (req, res) => {
-  const { sport, level, dateOfBirth, sex, mixedSex, city, description } =
-    req.body;
+  if (!checkBody(req.body, ["token", "sport", "level", "mixedSex"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+  const { sport, level, mixedSex, description } = req.body;
   User.updateOne(
     { token: req.body.token },
     {
       sport,
       level,
-      dateOfBirth: new Date(dateOfBirth),
-      sex,
+
       mixedSex,
-      city,
+
       description,
     }
   ).then((data) => {
