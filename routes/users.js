@@ -114,7 +114,7 @@ router.put("/update/", (req, res) => {
     {
       sport,
       level,
-      dateOfBirth: new Date(dateOfBirth.getDate(+1)),
+      dateOfBirth: new Date(getDate(dateOfBirth) + 1),
       sex,
       mixedSex,
       city,
