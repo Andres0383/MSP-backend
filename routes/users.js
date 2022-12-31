@@ -85,7 +85,7 @@ router.post("/signin", (req, res) => {
         firstname: data.firstname,
       });
     } else {
-      res.json({ result: false, error: "Mail not found or wrong password" });
+      res.json({ result: false, error: "Invalid email or wrong password" });
     }
   });
 });
