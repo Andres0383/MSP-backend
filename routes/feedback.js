@@ -6,7 +6,7 @@ const User = require("../models/users");
 const Feedback = require("../models/feedbacks");
 
 router.post("/", (req, res) => {
-  if (!checkBody(req.body, ["token", "note"])) {
+  if (!checkBody(req.body, ["token"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
